@@ -1,0 +1,1 @@
+// fetches entries (services), maps to list
