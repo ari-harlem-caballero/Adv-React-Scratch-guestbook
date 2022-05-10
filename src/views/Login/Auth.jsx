@@ -19,10 +19,11 @@ export default function Auth() {
       e.preventDefault();
       await login(email, password);
 
-      const url = location.state.origin ? location.state.origin.pathname : '/';
+      const url = location.state.origin 
+      ? location.state.origin.pathname 
+      : '/';
 
       history.replace(url);
-
     } catch (error) {
       setError(error.message);
     }
@@ -55,6 +56,7 @@ export default function Auth() {
         <button>
           Sign In
         </button>
+        <p>{error}</p>
       </form>
     </>
   )
