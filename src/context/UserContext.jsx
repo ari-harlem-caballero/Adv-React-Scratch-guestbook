@@ -26,8 +26,8 @@ export const UserProvider = ({ children }) => {
     <UserContext.Provider value={{ user, login, logout }} >
       {children}
     </UserContext.Provider>
-  )
-}
+  );
+};
 
 // useUser = useContext
 export const useUser = () => {
@@ -38,4 +38,4 @@ export const useUser = () => {
   }
 
   return context;
-}
+};
