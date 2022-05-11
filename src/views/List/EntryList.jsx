@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { createEntry, getEntries } from '../../services/entries';
 import { useUser } from '../../context/UserContext';
+import './Entry.css'
 
 export default function EntryList() {
   // state: entries, loading

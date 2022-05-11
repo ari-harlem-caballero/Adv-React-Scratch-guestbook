@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
+import './Auth.css';
 
 
 export default function Auth() {
@@ -9,15 +10,31 @@ export default function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { login } = useUser();
+  const { login, signUp } = useUser();
   const location = useLocation();
   const history = useHistory();
 
   // handle: authSubmit, 
-  async function handleSubmit(e) {
+  async function handleSignIn(e) {
     try {
       e.preventDefault();
       await login(email, password);
+
+      const url = location.state.origin 
+      ? location.state.origin.pathname 
+      : '/';
+
+      history.replace(url);
+    } catch (error) {
+      setError(error.message);
+    }
+  }
+
+  async function handleSignUp(e) {
+    try {
+      e.preventDefault();
+
+      await signUp(email, password);
 
       const url = location.state.origin 
       ? location.state.origin.pathname 
@@ -33,7 +50,7 @@ export default function Auth() {
   return (
     <>
       <h1>Welcome to Guestbook</h1>
-      <form onSubmit={handleSubmit}>
+      <form>
         <label htmlFor='email'>
           Email
           <input 
@@ -53,9 +70,14 @@ export default function Auth() {
             minLength='4'
             required />
         </label>
-        <button>
-          Sign In
-        </button>
+        <button
+          aria-label="Sign In"
+          onClick={handleSignIn}
+        >Sign In</button>
+        <button
+          aria-label="Sign Up"
+          onClick={handleSignUp}
+        >Sign Up</button>
         <p>{error}</p>
       </form>
     </>
