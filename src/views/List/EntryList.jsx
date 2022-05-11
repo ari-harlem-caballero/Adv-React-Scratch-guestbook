@@ -1,11 +1,11 @@
 // fetches entries (services), maps to list
 import { useEffect, useState } from 'react';
-import { getEntries } from '../../services/entries';
+import { createEntry, getEntries } from '../../services/entries';
 import { useUser } from '../../context/UserContext';
 
 export default function EntryList() {
   // state: entries, loading
-  const { logout, user } = useUser();
+  const { user } = useUser();
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [entryContent, setEntryContent] = useState('');
@@ -20,17 +20,25 @@ export default function EntryList() {
 
     fetchEntries();
   }, []);
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+
+    await createEntry({ userId: user.id, content: entryContent });
+
+    const results = await getEntries();
+
+    setEntries(results);
+    setLoading(false);
+  }
   // return: logout button, loading, map entires
   return (
     <>
-      <h1>Guestbook:</h1>
-      <p>{`Welcome back ${user.email}`}</p>
-      <button onClick={logout}>Logout</button>
       {loading ? (
         <p>Page Loading</p>
       ) : (
         <>
-        <form>
+        <form onSubmit={handleSubmit}>
           <textarea 
             value={entryContent}
             onChange={(e) => setEntryContent(e.target.value)}
