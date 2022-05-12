@@ -13,10 +13,15 @@ export default function EntryList() {
 
   useEffect(() => {
     const fetchEntries = async () => {
-      const results = await getEntries();
+      try {
+        const results = await getEntries();
+  
+        setEntries(results);
+        setLoading(false);
 
-      setEntries(results);
-      setLoading(false);
+      } catch(error) {
+        console.log(error);
+      }
     }
 
     fetchEntries();
@@ -43,9 +48,10 @@ export default function EntryList() {
           <textarea 
             value={entryContent}
             onChange={(e) => setEntryContent(e.target.value)}
+            placeholder='add new entry'
             required
           />
-          <button>Add to guestbook</button>
+          <button type='submit'>Add to guestbook</button>
         </form>
         <h3>Past entries:</h3>
         <ul>

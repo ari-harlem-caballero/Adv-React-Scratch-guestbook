@@ -1,6 +1,6 @@
 // behavior testing (load, display list, input/type)
 
-import { screen, render, waitForElementToBeRemoved } from "@testing-library/react";
+import { screen, render } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from "react-router-dom";
 import App from "../../App";
@@ -68,7 +68,43 @@ const server = setupServer(
               "created_at": "2022-05-11T00:10:38.530552+00:00"
           }
       ])
+    )),
+  rest.post(`${process.env.SUPABASE_API_URL}/rest/v1/entries`, (req, res, ctx) =>
+    res(
+      ctx.json(
+        [
+          {
+              "id": 712,
+              "guest_id": "b0390fda-f5ae-439a-8dfa-8dccde787615",
+              "content": "new entry",
+              "created_at": "2022-05-12T17:21:53.650013+00:00"
+          }
+      ]
     ))
+  ),
+  rest.get(`${process.env.SUPABASE_API_URL}/rest/v1/entries`, (req, res, ctx) =>
+  res(
+    ctx.json([
+        {
+            "id": 657,
+            "guest_id": "b0390fda-f5ae-439a-8dfa-8dccde787615",
+            "content": "cvbfbds",
+            "created_at": "2022-05-11T00:10:41.986778+00:00"
+        },
+        {
+            "id": 656,
+            "guest_id": "b0390fda-f5ae-439a-8dfa-8dccde787615",
+            "content": "ngfdsefawds",
+            "created_at": "2022-05-11T00:10:38.530552+00:00"
+        },
+        {
+          "id": 712,
+          "guest_id": "b0390fda-f5ae-439a-8dfa-8dccde787615",
+          "content": "new entry",
+          "created_at": "2022-05-12T17:21:53.650013+00:00"
+      }
+    ])
+  )),
 );
 
 beforeAll(() => server.listen());
@@ -94,16 +130,44 @@ describe('App', () => {
     const signInButton = screen.getByRole('button', { name: /sign in/i });
     userEvent.click(signInButton);
 
-    // screen.getByText('Page Loading');
-
-    // await waitForElementToBeRemoved(screen.getByText('Page Loading'));
-
     // // list load
     await screen.findByText('Past entries:');
 
     const entry = await screen.findByText('cvbfbds');
     expect(entry).toBeInTheDocument();
+
     // form exists
+    const entryForm = screen.getByPlaceholderText('add new entry');
     // adds new item to list
+    userEvent.type(entryForm, 'new entry');
+
+    const addButton = screen.getByRole('button', { name: /add to guestbook/i });
+    userEvent.click(addButton);
+
+    server.use(
+      rest.get(`${process.env.SUPABASE_API_URL}/rest/v1/entries`, (req, res, ctx) => {
+        return res(ctx.json({
+          "id": 657,
+          "guest_id": "b0390fda-f5ae-439a-8dfa-8dccde787615",
+          "content": "cvbfbds",
+          "created_at": "2022-05-11T00:10:41.986778+00:00"
+      },
+      {
+          "id": 656,
+          "guest_id": "b0390fda-f5ae-439a-8dfa-8dccde787615",
+          "content": "ngfdsefawds",
+          "created_at": "2022-05-11T00:10:38.530552+00:00"
+      },
+      {
+        "id": 712,
+        "guest_id": "b0390fda-f5ae-439a-8dfa-8dccde787615",
+        "content": "new entry",
+        "created_at": "2022-05-12T17:21:53.650013+00:00"
+    }))
+      }
+    ),
+    )
+    const newEntry = await screen.findByText('new entry');
+    expect(newEntry).toBeInTheDocument();
   });
 })
