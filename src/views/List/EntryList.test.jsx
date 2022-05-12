@@ -1,7 +1,7 @@
 // behavior testing (load, display list, input/type)
 
 import { screen, render, waitForElementToBeRemoved } from "@testing-library/react";
-import userEvent from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from "react-router-dom";
 import App from "../../App";
 import { UserProvider } from "../../context/UserContext";
@@ -94,12 +94,15 @@ describe('App', () => {
     const signInButton = screen.getByRole('button', { name: /sign in/i });
     userEvent.click(signInButton);
 
-    screen.getByText('Page Loading');
+    // screen.getByText('Page Loading');
 
-    await waitForElementToBeRemoved(screen.getByText('Page Loading'));
+    // await waitForElementToBeRemoved(screen.getByText('Page Loading'));
 
     // // list load
     await screen.findByText('Past entries:');
+
+    const entry = await screen.findByText('cvbfbds');
+    expect(entry).toBeInTheDocument();
     // form exists
     // adds new item to list
   });
