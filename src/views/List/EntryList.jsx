@@ -29,13 +29,18 @@ export default function EntryList() {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    try {
+  
+      await createEntry({ userId: user.id, content: entryContent });
+  
+      const results = await getEntries();
+  
+      setEntries(results);
+      setLoading(false);
 
-    await createEntry({ userId: user.id, content: entryContent });
-
-    const results = await getEntries();
-
-    setEntries(results);
-    setLoading(false);
+    } catch(error) {
+      console.log(error);
+    }
   }
   // return: logout button, loading, map entires
   return (
