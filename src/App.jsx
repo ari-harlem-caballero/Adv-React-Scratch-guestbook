@@ -1,6 +1,6 @@
 import { Route, Switch } from "react-router-dom";
 import EntryList from "./views/List/EntryList";
-import Auth from "./views/login/Auth";
+import Auth from "./views/Login/Auth";
 import PrivateRoute from "./components/PrivateRoute";
 import { Redirect } from "react-router-dom";
 import Header from "./components/Header";
