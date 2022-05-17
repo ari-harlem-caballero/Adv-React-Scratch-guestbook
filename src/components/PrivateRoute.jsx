@@ -1,5 +1,5 @@
 // user/location, redirect route (after login -> guestbook)
-import { Redirect, Route, useLocation } from "react-router-dom";
+import { Redirect, Route, useLocation } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 
 export default function PrivateRoute({ children, ...rest }) {
@@ -8,16 +8,15 @@ export default function PrivateRoute({ children, ...rest }) {
 
   return (
     <Route {...rest}>
-      {user.email ? (
-        children
-      ) : (
-        <Redirect
+      {user.email 
+      ? children
+      : <Redirect
           to={{
             pathname: '/login',
             state: { origin: location }
           }}
         />
-      )}
+      }
     </Route>
   );
 }

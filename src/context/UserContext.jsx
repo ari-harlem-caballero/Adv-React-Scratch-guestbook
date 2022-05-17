@@ -5,7 +5,7 @@ import { getUser, signInUser, signUpUser } from "../services/user";
 export const UserContext = createContext();
 
 // UserProvider (children), getUser(service)/set user state, login
-export const UserProvider = ({ children }) => {
+export default function UserProvider({ children }) {
   const currentUser = getUser();
   const [user, setUser] = useState(currentUser || { email: null });
 
