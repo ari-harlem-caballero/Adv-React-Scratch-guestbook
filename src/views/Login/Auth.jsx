@@ -78,7 +78,7 @@ export default function Auth() {
           aria-label="Sign Up"
           onClick={handleSignUp}
         >Sign Up</button>
-        <p>{error}</p>
+        {/* <p>{error}</p> */}
       </form>
     </>
   )

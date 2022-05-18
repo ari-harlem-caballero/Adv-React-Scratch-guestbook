@@ -67,9 +67,10 @@ describe('App', () => {
 
     const addButton = screen.getByRole('button', { name: /add to guestbook/i });
 
+    
     userEvent.click(addButton);
-
-    await screen.findByText('Third Post');
-});
+    
+    await screen.findByText('Third Post', { selector: 'li' });
+  });
 
 });

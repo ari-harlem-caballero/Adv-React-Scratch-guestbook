@@ -12,7 +12,7 @@ export default function EntryList() {
   const [entryContent, setEntryContent] = useState('');
 
   useEffect(() => {
-    const fetchEntries = async () => {
+    async function fetchEntries() {
       try {
         const results = await getEntries();
   
